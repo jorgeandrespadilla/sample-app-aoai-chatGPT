@@ -59,7 +59,7 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conv
             <div className={styles.questionInputSendButtonContainer} 
                 role="button" 
                 tabIndex={0}
-                aria-label="Ask question button"
+                aria-label="Botón para enviar pregunta"
                 onClick={sendQuestion}
                 onKeyDown={e => e.key === "Enter" || e.key === " " ? sendQuestion() : null}
             >

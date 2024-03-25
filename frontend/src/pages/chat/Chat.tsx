@@ -36,9 +36,9 @@ import { AppStateContext } from "../../state/AppProvider";
 import { useBoolean } from "@fluentui/react-hooks";
 
 const enum messageStatus {
-    NotRunning = "Not Running",
-    Processing = "Processing",
-    Done = "Done"
+    NotRunning = "En Espera",
+    Processing = "En Proceso",
+    Done = "Completado"
 }
 
 const Chat = () => {
@@ -61,7 +61,7 @@ const Chat = () => {
     const errorDialogContentProps = {
         type: DialogType.close,
         title: errorMsg?.title,
-        closeButtonAriaLabel: 'Close',
+        closeButtonAriaLabel: 'Cerrar',
         subText: errorMsg?.subtitle,
     };
 
@@ -79,9 +79,9 @@ const Chat = () => {
             && appStateContext?.state.isCosmosDBAvailable?.status !== CosmosDBStatus.NotConfigured
             && appStateContext?.state.chatHistoryLoadingState === ChatHistoryLoadingState.Fail 
             && hideErrorDialog) {
-            let subtitle = `${appStateContext.state.isCosmosDBAvailable.status}. Please contact the site administrator.`
+            let subtitle = `${appStateContext.state.isCosmosDBAvailable.status}. Por favor, comuníquese con el administrador del sitio.`
             setErrorMsg({
-                title: "Chat history is not enabled",
+                title: "El historial de chat no está disponible",
                 subtitle: subtitle
             })
             toggleErrorDialog();
@@ -241,7 +241,7 @@ const Chat = () => {
 
         } catch (e) {
             if (!abortController.signal.aborted) {
-                let errorMessage = "An error occurred. Please try again. If the problem persists, please contact the site administrator.";
+                let errorMessage = "Un error ocurrió. Por favor, inténtelo de nuevo. Si el problema persiste, póngase en contacto con el administrador del sitio.";
                 if (result.error?.message) {
                     errorMessage = result.error.message;
                 }
@@ -311,11 +311,11 @@ const Chat = () => {
             const response = conversationId ? await historyGenerate(request, abortController.signal, conversationId) : await historyGenerate(request, abortController.signal);
             if (!response?.ok) {
                 const responseJson = await response.json();
-                var errorResponseMessage = responseJson.error === undefined ? "Please try again. If the problem persists, please contact the site administrator." : responseJson.error;
+                var errorResponseMessage = responseJson.error === undefined ? "Por favor, inténtelo de nuevo. Si el problema persiste, póngase en contacto con el administrador del sitio." : responseJson.error;
                 let errorChatMsg: ChatMessage = {
                     id: uuid(),
                     role: ERROR,
-                    content: `There was an error generating a response. Chat history can't be saved at this time. ${errorResponseMessage}`,
+                    content: `Hubo un error al generar una respuesta. El historial de chat no se puede guardar en este momento. ${errorResponseMessage}`,
                     date: new Date().toISOString()
                 }
                 let resultConversation;
@@ -423,7 +423,7 @@ const Chat = () => {
 
         } catch (e) {
             if (!abortController.signal.aborted) {
-                let errorMessage = `An error occurred. ${errorResponseMessage}`;
+                let errorMessage = `Ocurrió un error. ${errorResponseMessage}`;
                 if (result.error?.message) {
                     errorMessage = result.error.message;
                 }
@@ -498,8 +498,8 @@ const Chat = () => {
             let response = await historyClear(appStateContext?.state.currentChat.id)
             if (!response.ok) {
                 setErrorMsg({
-                    title: "Error clearing current chat",
-                    subtitle: "Please try again. If the problem persists, please contact the site administrator.",
+                    title: "Error al borrar el chat actual",
+                    subtitle: "Por favor, inténtelo de nuevo. Si el problema persiste, póngase en contacto con el administrador del sitio.",
                 })
                 toggleErrorDialog();
             } else {
@@ -551,7 +551,7 @@ const Chat = () => {
                 saveToDB(appStateContext.state.currentChat.messages, appStateContext.state.currentChat.id)
                     .then((res) => {
                         if (!res.ok) {
-                            let errorMessage = "An error occurred. Answers can't be saved at this time. If the problem persists, please contact the site administrator.";
+                            let errorMessage = "Ocurrió un error. Por favor, inténtelo de nuevo. Si el problema persiste, póngase en contacto con el administrador del sitio.";
                             let errorChatMsg: ChatMessage = {
                                 id: uuid(),
                                 role: ERROR,
@@ -561,7 +561,7 @@ const Chat = () => {
                             if (!appStateContext?.state.currentChat?.messages) {
                                 let err: Error = {
                                     ...new Error,
-                                    message: "Failure fetching current chat state."
+                                    message: "Error al recuperar el estado actual del chat."
                                 }
                                 throw err
                             }
@@ -627,13 +627,12 @@ const Chat = () => {
             {showAuthMessage ? (
                 <Stack className={styles.chatEmptyState}>
                     <ShieldLockRegular className={styles.chatIcon} style={{ color: 'darkorange', height: "200px", width: "200px" }} />
-                    <h1 className={styles.chatEmptyStateTitle}>Authentication Not Configured</h1>
+                    <h1 className={styles.chatEmptyStateTitle}>Autenticación No Configurada</h1>
                     <h2 className={styles.chatEmptyStateSubtitle}>
-                        This app does not have authentication configured. Please add an identity provider by finding your app in the <a href="https://portal.azure.com/" target="_blank">Azure Portal</a> 
-                        and following <a href="https://learn.microsoft.com/en-us/azure/app-service/scenario-secure-app-authentication-app-service#3-configure-authentication-and-authorization" target="_blank">these instructions</a>.
+                        Esta aplicación no tiene la autenticación configurada. Por favor, agregue un proveedor de identidad encontrando su aplicación en el <a href="https://portal.azure.com/" target="_blank">Portal de Azure</a> y siga <a href="https://learn.microsoft.com/en-us/azure/app-service/scenario-secure-app-authentication-app-service#3-configure-authentication-and-authorization" target="_blank">estas instrucciones</a>.
                     </h2>
-                    <h2 className={styles.chatEmptyStateSubtitle} style={{ fontSize: "20px" }}><strong>Authentication configuration takes a few minutes to apply. </strong></h2>
-                    <h2 className={styles.chatEmptyStateSubtitle} style={{ fontSize: "20px" }}><strong>If you deployed in the last 10 minutes, please wait and reload the page after 10 minutes.</strong></h2>
+                    <h2 className={styles.chatEmptyStateSubtitle} style={{ fontSize: "20px" }}><strong>La configuración de autenticación tarda unos minutos en aplicarse.</strong></h2>
+                    <h2 className={styles.chatEmptyStateSubtitle} style={{ fontSize: "20px" }}><strong>Si implementó en los últimos 10 minutos, espere y vuelva a cargar la página después de 10 minutos.</strong></h2>
                 </Stack>
             ) : (
                 <Stack horizontal className={styles.chatRoot}>
@@ -682,7 +681,7 @@ const Chat = () => {
                                         <div className={styles.chatMessageGpt}>
                                             <Answer
                                                 answer={{
-                                                    answer: "Generating answer...",
+                                                    answer: "Generando respuesta...",
                                                     citations: []
                                                 }}
                                                 onCitationClicked={() => null}
@@ -700,13 +699,13 @@ const Chat = () => {
                                     horizontal
                                     className={styles.stopGeneratingContainer}
                                     role="button"
-                                    aria-label="Stop generating"
+                                    aria-label="Dejar de generar"
                                     tabIndex={0}
                                     onClick={stopGenerating}
                                     onKeyDown={e => e.key === "Enter" || e.key === " " ? stopGenerating() : null}
                                 >
                                     <SquareRegular className={styles.stopGeneratingIcon} aria-hidden="true" />
-                                    <span className={styles.stopGeneratingText} aria-hidden="true">Stop generating</span>
+                                    <span className={styles.stopGeneratingText} aria-hidden="true">Dejar de generar</span>
                                 </Stack>
                             )}
                             <Stack>
@@ -731,7 +730,7 @@ const Chat = () => {
                                     iconProps={{ iconName: 'Add' }}
                                     onClick={newChat}
                                     disabled={disabledButton()}
-                                    aria-label="start a new chat button"
+                                    aria-label="botón para iniciar nuevo chat"
                                 />}
                                 <CommandBarButton
                                     role="button"
@@ -754,7 +753,7 @@ const Chat = () => {
                                     iconProps={{ iconName: 'Broom' }}
                                     onClick={appStateContext?.state.isCosmosDBAvailable?.status !== CosmosDBStatus.NotConfigured ? clearChat : newChat}
                                     disabled={disabledButton()}
-                                    aria-label="clear chat button"
+                                    aria-label="botón para limpiar chat"
                                 />
                                 <Dialog
                                     hidden={hideErrorDialog}
@@ -766,7 +765,7 @@ const Chat = () => {
                             </Stack>
                             <QuestionInput
                                 clearOnSend
-                                placeholder="Type a new question..."
+                                placeholder="Escribe una pregunta..."
                                 disabled={isLoading}
                                 onSend={(question, id) => {
                                     appStateContext?.state.isCosmosDBAvailable?.cosmosDB ? makeApiRequestWithCosmosDB(question, id) : makeApiRequestWithoutCosmosDB(question, id)
@@ -777,10 +776,11 @@ const Chat = () => {
                     </div>
                     {/* Citation Panel */}
                     {messages && messages.length > 0 && isCitationPanelOpen && activeCitation && (
-                        <Stack.Item className={styles.citationPanel} tabIndex={0} role="tabpanel" aria-label="Citations Panel">
-                            <Stack aria-label="Citations Panel Header Container" horizontal className={styles.citationPanelHeaderContainer} horizontalAlign="space-between" verticalAlign="center">
-                                <span aria-label="Citations" className={styles.citationPanelHeader}>Citations</span>
-                                <IconButton iconProps={{ iconName: 'Cancel' }} aria-label="Close citations panel" onClick={() => setIsCitationPanelOpen(false)} />
+                        <Stack.Item className={styles.citationPanel} tabIndex={0} role="tabpanel" aria-label="Panel de Citas">
+                            <Stack aria-label="
+                            Contenedor de Encabezado del Panel de Citas" horizontal className={styles.citationPanelHeaderContainer} horizontalAlign="space-between" verticalAlign="center">
+                                <span aria-label="Citas" className={styles.citationPanelHeader}>Citas</span>
+                                <IconButton iconProps={{ iconName: 'Cancel' }} aria-label="Cerrar Panel de Citas" onClick={() => setIsCitationPanelOpen(false)} />
                             </Stack>
                             <h5 className={styles.citationPanelTitle} tabIndex={0} title={activeCitation.url && !activeCitation.url.includes("blob.core") ? activeCitation.url : activeCitation.title ?? ""} onClick={() => onViewSource(activeCitation)}>{activeCitation.title}</h5>
                             <div tabIndex={0}>

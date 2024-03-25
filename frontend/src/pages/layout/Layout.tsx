@@ -11,10 +11,10 @@ import { CosmosDBStatus } from "../../api";
 const Layout = () => {
     const [isSharePanelOpen, setIsSharePanelOpen] = useState<boolean>(false);
     const [copyClicked, setCopyClicked] = useState<boolean>(false);
-    const [copyText, setCopyText] = useState<string>("Copy URL");
-    const [shareLabel, setShareLabel] = useState<string | undefined>("Share");
-    const [hideHistoryLabel, setHideHistoryLabel] = useState<string>("Hide chat history");
-    const [showHistoryLabel, setShowHistoryLabel] = useState<string>("Show chat history");
+    const [copyText, setCopyText] = useState<string>("Copiar URL");
+    const [shareLabel, setShareLabel] = useState<string | undefined>("Compartir");
+    const [hideHistoryLabel, setHideHistoryLabel] = useState<string>("Ocultar historial de chat");
+    const [showHistoryLabel, setShowHistoryLabel] = useState<string>("Mostrar historial de chat");
     const appStateContext = useContext(AppStateContext)
     const ui = appStateContext?.state.frontendSettings?.ui;
 
@@ -25,7 +25,7 @@ const Layout = () => {
     const handleSharePanelDismiss = () => {
         setIsSharePanelOpen(false);
         setCopyClicked(false);
-        setCopyText("Copy URL");
+        setCopyText("Copiar URL");
     };
 
     const handleCopyClick = () => {
@@ -39,7 +39,7 @@ const Layout = () => {
 
     useEffect(() => {
         if (copyClicked) {
-            setCopyText("Copied URL");
+            setCopyText("URL copiada");
         }
     }, [copyClicked]);
 
@@ -49,12 +49,12 @@ const Layout = () => {
         const handleResize = () => {
           if (window.innerWidth < 480) {
             setShareLabel(undefined)
-            setHideHistoryLabel("Hide history")
-            setShowHistoryLabel("Show history")
+            setHideHistoryLabel("Ocultar historial")
+            setShowHistoryLabel("Mostrar historial")
           } else {
-            setShareLabel("Share")
-            setHideHistoryLabel("Hide chat history")
-            setShowHistoryLabel("Show chat history")
+            setShareLabel("Compartir")
+            setHideHistoryLabel("Ocultar historial de chat")
+            setShowHistoryLabel("Mostrar historial de chat")
           }
         };
     
@@ -106,7 +106,7 @@ const Layout = () => {
                     }]
                 }}
                 dialogContentProps={{
-                    title: "Share the web app",
+                    title: "Compartir enlace",
                     showCloseButton: true
                 }}
             >
@@ -116,7 +116,7 @@ const Layout = () => {
                         className={styles.copyButtonContainer}
                         role="button"
                         tabIndex={0}
-                        aria-label="Copy"
+                        aria-label="Copiar"
                         onClick={handleCopyClick}
                         onKeyDown={e => e.key === "Enter" || e.key === " " ? handleCopyClick() : null}
                     >

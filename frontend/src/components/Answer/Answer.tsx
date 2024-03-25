@@ -73,17 +73,17 @@ export const Answer = ({
             const part_i = citation.part_index ?? (citation.chunk_id ? parseInt(citation.chunk_id) + 1 : '');
             if (truncate && citation.filepath.length > filePathTruncationLimit) {
                 const citationLength = citation.filepath.length;
-                citationFilename = `${citation.filepath.substring(0, 20)}...${citation.filepath.substring(citationLength - 20)} - Part ${part_i}`;
+                citationFilename = `${citation.filepath.substring(0, 20)}...${citation.filepath.substring(citationLength - 20)} - Parte ${part_i}`;
             }
             else {
-                citationFilename = `${citation.filepath} - Part ${part_i}`;
+                citationFilename = `${citation.filepath} - Parte ${part_i}`;
             }
         }
         else if (citation.filepath && citation.reindex_id) {
-            citationFilename = `${citation.filepath} - Part ${citation.reindex_id}`;
+            citationFilename = `${citation.filepath} - Parte ${citation.reindex_id}`;
         }
         else {
-            citationFilename = `Citation ${index}`;
+            citationFilename = `Cita ${index}`;
         }
         return citationFilename;
     }
@@ -153,13 +153,13 @@ export const Answer = ({
         return (<>
             <div>Why wasn't this response helpful?</div>
             <Stack tokens={{childrenGap: 4}}>
-                <Checkbox label="Citations are missing" id={Feedback.MissingCitation} defaultChecked={negativeFeedbackList.includes(Feedback.MissingCitation)} onChange={updateFeedbackList}></Checkbox>
-                <Checkbox label="Citations are wrong" id={Feedback.WrongCitation} defaultChecked={negativeFeedbackList.includes(Feedback.WrongCitation)} onChange={updateFeedbackList}></Checkbox>
-                <Checkbox label="The response is not from my data" id={Feedback.OutOfScope} defaultChecked={negativeFeedbackList.includes(Feedback.OutOfScope)} onChange={updateFeedbackList}></Checkbox>
-                <Checkbox label="Inaccurate or irrelevant" id={Feedback.InaccurateOrIrrelevant} defaultChecked={negativeFeedbackList.includes(Feedback.InaccurateOrIrrelevant)} onChange={updateFeedbackList}></Checkbox>
-                <Checkbox label="Other" id={Feedback.OtherUnhelpful} defaultChecked={negativeFeedbackList.includes(Feedback.OtherUnhelpful)} onChange={updateFeedbackList}></Checkbox>
+                <Checkbox label="No hay citas" id={Feedback.MissingCitation} defaultChecked={negativeFeedbackList.includes(Feedback.MissingCitation)} onChange={updateFeedbackList}></Checkbox>
+                <Checkbox label="Las citas son incorrectas" id={Feedback.WrongCitation} defaultChecked={negativeFeedbackList.includes(Feedback.WrongCitation)} onChange={updateFeedbackList}></Checkbox>
+                <Checkbox label="La respuesta no usa mis datos" id={Feedback.OutOfScope} defaultChecked={negativeFeedbackList.includes(Feedback.OutOfScope)} onChange={updateFeedbackList}></Checkbox>
+                <Checkbox label="Inexacto o irrelevante" id={Feedback.InaccurateOrIrrelevant} defaultChecked={negativeFeedbackList.includes(Feedback.InaccurateOrIrrelevant)} onChange={updateFeedbackList}></Checkbox>
+                <Checkbox label="Otro" id={Feedback.OtherUnhelpful} defaultChecked={negativeFeedbackList.includes(Feedback.OtherUnhelpful)} onChange={updateFeedbackList}></Checkbox>
             </Stack>
-            <div onClick={() => setShowReportInappropriateFeedback(true)} style={{ color: "#115EA3", cursor: "pointer"}}>Report inappropriate content</div>
+            <div onClick={() => setShowReportInappropriateFeedback(true)} style={{ color: "#115EA3", cursor: "pointer"}}>Reportar contenido inapropiado</div>
         </>);
     }
 
@@ -168,11 +168,11 @@ export const Answer = ({
             <>
                 <div>The content is <span style={{ color: "red" }} >*</span></div>
                 <Stack tokens={{childrenGap: 4}}>
-                    <Checkbox label="Hate speech, stereotyping, demeaning" id={Feedback.HateSpeech} defaultChecked={negativeFeedbackList.includes(Feedback.HateSpeech)} onChange={updateFeedbackList}></Checkbox>
-                    <Checkbox label="Violent: glorification of violence, self-harm" id={Feedback.Violent} defaultChecked={negativeFeedbackList.includes(Feedback.Violent)} onChange={updateFeedbackList}></Checkbox>
-                    <Checkbox label="Sexual: explicit content, grooming" id={Feedback.Sexual} defaultChecked={negativeFeedbackList.includes(Feedback.Sexual)} onChange={updateFeedbackList}></Checkbox>
-                    <Checkbox label="Manipulative: devious, emotional, pushy, bullying" defaultChecked={negativeFeedbackList.includes(Feedback.Manipulative)} id={Feedback.Manipulative} onChange={updateFeedbackList}></Checkbox>
-                    <Checkbox label="Other" id={Feedback.OtherHarmful} defaultChecked={negativeFeedbackList.includes(Feedback.OtherHarmful)} onChange={updateFeedbackList}></Checkbox>
+                    <Checkbox label="Ofensivo: discurso de odio, estereotipos, denigrante" id={Feedback.HateSpeech} defaultChecked={negativeFeedbackList.includes(Feedback.HateSpeech)} onChange={updateFeedbackList}></Checkbox>
+                    <Checkbox label="Violento: glorificación de la violencia, autolesiones" id={Feedback.Violent} defaultChecked={negativeFeedbackList.includes(Feedback.Violent)} onChange={updateFeedbackList}></Checkbox>
+                    <Checkbox label="Sexual: contenido explícito" id={Feedback.Sexual} defaultChecked={negativeFeedbackList.includes(Feedback.Sexual)} onChange={updateFeedbackList}></Checkbox>
+                    <Checkbox label="Manipulador: engañoso, emocional, insistente, intimidante" defaultChecked={negativeFeedbackList.includes(Feedback.Manipulative)} id={Feedback.Manipulative} onChange={updateFeedbackList}></Checkbox>
+                    <Checkbox label="Otro" id={Feedback.OtherHarmful} defaultChecked={negativeFeedbackList.includes(Feedback.OtherHarmful)} onChange={updateFeedbackList}></Checkbox>
                 </Stack>
             </>
         );
@@ -196,7 +196,7 @@ export const Answer = ({
                             {FEEDBACK_ENABLED && answer.message_id !== undefined && <Stack horizontal horizontalAlign="space-between">
                                 <ThumbLike20Filled
                                     aria-hidden="false"
-                                    aria-label="Like this response"
+                                    aria-label="Me gusta esta respuesta"
                                     onClick={() => onLikeResponseClicked()}
                                     style={feedbackState === Feedback.Positive || appStateContext?.state.feedbackState[answer.message_id] === Feedback.Positive ? 
                                         { color: "darkgreen", cursor: "pointer" } : 
@@ -204,7 +204,7 @@ export const Answer = ({
                                 />
                                 <ThumbDislike20Filled
                                     aria-hidden="false"
-                                    aria-label="Dislike this response"
+                                    aria-label="No me gusta esta respuesta"
                                     onClick={() => onDislikeResponseClicked()}
                                     style={(feedbackState !== Feedback.Positive && feedbackState !== Feedback.Neutral && feedbackState !== undefined) ? 
                                         { color: "darkred", cursor: "pointer" } : 
@@ -225,11 +225,11 @@ export const Answer = ({
                                 <Text
                                     className={styles.accordionTitle}
                                     onClick={toggleIsRefAccordionOpen}
-                                    aria-label="Open references"
+                                    aria-label="Abrir referencias"
                                     tabIndex={0}
                                     role="button"
                                 >
-                                <span>{parsedAnswer.citations.length > 1 ? parsedAnswer.citations.length + " references" : "1 reference"}</span>
+                                <span>{parsedAnswer.citations.length > 1 ? parsedAnswer.citations.length + " referencias" : "1 referencia"}</span>
                                 </Text>
                                 <FontIcon className={styles.accordionIcon}
                                 onClick={handleChevronClick} iconName={chevronIsExpanded ? 'ChevronDown' : 'ChevronRight'}
@@ -240,7 +240,7 @@ export const Answer = ({
                     </Stack.Item>
                 )}
                 <Stack.Item className={styles.answerDisclaimerContainer}>
-                    <span className={styles.answerDisclaimer}>AI-generated content may be incorrect</span>
+                    <span className={styles.answerDisclaimer}>El contenido generado por IA puede ser incorrecto</span>
                 </Stack.Item>
                 </Stack>
                 {chevronIsExpanded && 
@@ -291,13 +291,13 @@ export const Answer = ({
                 }}
             >
                 <Stack tokens={{childrenGap: 4}}>
-                    <div>Your feedback will improve this experience.</div>
+                    <div>Su opinión mejorará esta experiencia.</div>
                     
                     {!showReportInappropriateFeedback ? <UnhelpfulFeedbackContent/> : <ReportInappropriateFeedbackContent/>}
                     
-                    <div>By pressing submit, your feedback will be visible to the application owner.</div>
+                    <div>Al presionar enviar, su opinión será visible para el propietario de la aplicación.</div>
                     
-                    <DefaultButton disabled={negativeFeedbackList.length < 1} onClick={onSubmitNegativeFeedback}>Submit</DefaultButton>
+                    <DefaultButton disabled={negativeFeedbackList.length < 1} onClick={onSubmitNegativeFeedback}>Enviar</DefaultButton>
                 </Stack>
                 
             </Dialog>

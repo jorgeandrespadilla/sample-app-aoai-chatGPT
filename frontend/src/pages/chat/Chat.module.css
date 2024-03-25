@@ -192,6 +192,7 @@
 }
 
 .stopGeneratingContainer {
+    cursor: pointer;
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
@@ -200,22 +201,24 @@
     padding: 5px 16px;
     gap: 4px;
     position: absolute;
-    width: 161px;
+    width: 171px;
     height: 32px;
-    left: calc(50% - 161px/2 + 25.8px);
+    left: calc(50% - 171px/2 + 25.8px);
     bottom: 116px;
     border: 1px solid #D1D1D1;
     border-radius: 16px;
 }
 
 .stopGeneratingIcon {
+    pointer-events: none;
     width: 14px;
     height: 14px;
     color: #424242;
 }
 
 .stopGeneratingText {
-    width: 103px;
+    pointer-events: none;
+    width: 110px;
     height: 20px;
     font-style: normal;
     font-weight: 600;
